@@ -206,7 +206,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="MineSweeper.cpp" />
-    <ClCompile Include="clickablelabel.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mainwindow.cpp" />
   </ItemGroup>

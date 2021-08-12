@@ -5,19 +5,23 @@
 #include <QWidget>
 #include <Qt>
 
-class ClickableLabel : public QLabel {
-	Q_OBJECT
+class ClickableLabel : public QLabel	//label with the ability to register a mouse click
+{
+Q_OBJECT
 
 public:
-	explicit ClickableLabel(QWidget* parent = Q_NULLPTR, Qt::WindowFlags f = Qt::WindowFlags());
+	explicit ClickableLabel(QWidget* parent = Q_NULLPTR, Qt::WindowFlags f = Qt::WindowFlags()): QLabel(parent)
+	{
+	};
 
 signals:
 	void clicked(QMouseEvent* event);
 
 protected:
-	void mousePressEvent(QMouseEvent* event) override;
-
+	void mousePressEvent(QMouseEvent* event) override
+	{
+		emit clicked(event);
+	}
 };
 
 #endif // CLICKABLELABEL_H
-

@@ -13,6 +13,7 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLCDNumber>
+#include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QRadioButton>
@@ -29,27 +30,30 @@ public:
     QWidget *centralwidget;
     QVBoxLayout *verticalLayout;
     QHBoxLayout *menu_layout;
-    QVBoxLayout *verticalLayout_2;
-    QLCDNumber *label_mines;
-    QLCDNumber *label_time;
     QVBoxLayout *game_buttons;
     QRadioButton *difficulty_1;
     QRadioButton *difficulty_2;
     QRadioButton *difficulty_3;
     QHBoxLayout *custom;
     QRadioButton *difficulty_custom;
-    QVBoxLayout *counts;
+    QHBoxLayout *horizontalLayout;
+    QLabel *label;
     QSpinBox *x_count;
+    QLabel *label_2;
     QSpinBox *y_count;
+    QLabel *label_3;
     QSpinBox *mines_count;
     QPushButton *button_game;
+    QVBoxLayout *verticalLayout_2;
+    QLCDNumber *label_mines;
+    QLCDNumber *label_time;
     ClickableLabel *game_map;
 
     void setupUi(QMainWindow *MainWindow)
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(560, 560);
+        MainWindow->resize(753, 591);
         MainWindow->setMaximumSize(QSize(1000, 1000));
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
@@ -58,24 +62,6 @@ public:
         menu_layout = new QHBoxLayout();
         menu_layout->setObjectName(QString::fromUtf8("menu_layout"));
         menu_layout->setSizeConstraint(QLayout::SetDefaultConstraint);
-        verticalLayout_2 = new QVBoxLayout();
-        verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
-        label_mines = new QLCDNumber(centralwidget);
-        label_mines->setObjectName(QString::fromUtf8("label_mines"));
-        label_mines->setMaximumSize(QSize(200, 100));
-
-        verticalLayout_2->addWidget(label_mines);
-
-        label_time = new QLCDNumber(centralwidget);
-        label_time->setObjectName(QString::fromUtf8("label_time"));
-        label_time->setMaximumSize(QSize(200, 100));
-        label_time->setSegmentStyle(QLCDNumber::Flat);
-
-        verticalLayout_2->addWidget(label_time);
-
-
-        menu_layout->addLayout(verticalLayout_2);
-
         game_buttons = new QVBoxLayout();
         game_buttons->setObjectName(QString::fromUtf8("game_buttons"));
         difficulty_1 = new QRadioButton(centralwidget);
@@ -108,31 +94,49 @@ public:
 
         game_buttons->addLayout(custom);
 
-        counts = new QVBoxLayout();
-        counts->setObjectName(QString::fromUtf8("counts"));
+        horizontalLayout = new QHBoxLayout();
+        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
+        label = new QLabel(centralwidget);
+        label->setObjectName(QString::fromUtf8("label"));
+
+        horizontalLayout->addWidget(label, 0, Qt::AlignHCenter);
+
         x_count = new QSpinBox(centralwidget);
         x_count->setObjectName(QString::fromUtf8("x_count"));
         x_count->setEnabled(false);
+        x_count->setMaximumSize(QSize(50, 16777215));
         x_count->setMinimum(2);
 
-        counts->addWidget(x_count, 0, Qt::AlignHCenter);
+        horizontalLayout->addWidget(x_count);
+
+        label_2 = new QLabel(centralwidget);
+        label_2->setObjectName(QString::fromUtf8("label_2"));
+
+        horizontalLayout->addWidget(label_2, 0, Qt::AlignHCenter);
 
         y_count = new QSpinBox(centralwidget);
         y_count->setObjectName(QString::fromUtf8("y_count"));
         y_count->setEnabled(false);
+        y_count->setMaximumSize(QSize(50, 16777215));
         y_count->setMinimum(2);
 
-        counts->addWidget(y_count, 0, Qt::AlignHCenter);
+        horizontalLayout->addWidget(y_count);
+
+        label_3 = new QLabel(centralwidget);
+        label_3->setObjectName(QString::fromUtf8("label_3"));
+
+        horizontalLayout->addWidget(label_3, 0, Qt::AlignHCenter);
 
         mines_count = new QSpinBox(centralwidget);
         mines_count->setObjectName(QString::fromUtf8("mines_count"));
         mines_count->setEnabled(false);
+        mines_count->setMaximumSize(QSize(50, 16777215));
         mines_count->setMinimum(3);
 
-        counts->addWidget(mines_count, 0, Qt::AlignHCenter);
+        horizontalLayout->addWidget(mines_count);
 
 
-        game_buttons->addLayout(counts);
+        game_buttons->addLayout(horizontalLayout);
 
         button_game = new QPushButton(centralwidget);
         button_game->setObjectName(QString::fromUtf8("button_game"));
@@ -146,6 +150,24 @@ public:
 
 
         menu_layout->addLayout(game_buttons);
+
+        verticalLayout_2 = new QVBoxLayout();
+        verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
+        label_mines = new QLCDNumber(centralwidget);
+        label_mines->setObjectName(QString::fromUtf8("label_mines"));
+        label_mines->setMaximumSize(QSize(200, 100));
+
+        verticalLayout_2->addWidget(label_mines);
+
+        label_time = new QLCDNumber(centralwidget);
+        label_time->setObjectName(QString::fromUtf8("label_time"));
+        label_time->setMaximumSize(QSize(200, 100));
+        label_time->setSegmentStyle(QLCDNumber::Flat);
+
+        verticalLayout_2->addWidget(label_time);
+
+
+        menu_layout->addLayout(verticalLayout_2);
 
 
         verticalLayout->addLayout(menu_layout);
@@ -170,6 +192,18 @@ public:
         difficulty_2->setText(QCoreApplication::translate("MainWindow", "Average (16x16 with 40 mines)", nullptr));
         difficulty_3->setText(QCoreApplication::translate("MainWindow", "Expert (30x16 with 99 mines)", nullptr));
         difficulty_custom->setText(QCoreApplication::translate("MainWindow", "Custom", nullptr));
+        label->setText(QCoreApplication::translate("MainWindow", "X:", nullptr));
+#if QT_CONFIG(whatsthis)
+        x_count->setWhatsThis(QCoreApplication::translate("MainWindow", "Mines:", nullptr));
+#endif // QT_CONFIG(whatsthis)
+        label_2->setText(QCoreApplication::translate("MainWindow", "Y:", nullptr));
+#if QT_CONFIG(whatsthis)
+        y_count->setWhatsThis(QCoreApplication::translate("MainWindow", "Y:", nullptr));
+#endif // QT_CONFIG(whatsthis)
+        label_3->setText(QCoreApplication::translate("MainWindow", "Mines:", nullptr));
+#if QT_CONFIG(whatsthis)
+        mines_count->setWhatsThis(QString());
+#endif // QT_CONFIG(whatsthis)
         button_game->setText(QCoreApplication::translate("MainWindow", "Start New Game", nullptr));
         game_map->setText(QString());
     } // retranslateUi

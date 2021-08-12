@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>560</width>
-    <height>560</height>
+    <width>753</width>
+    <height>591</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -26,33 +26,6 @@
       <property name="sizeConstraint">
        <enum>QLayout::SetDefaultConstraint</enum>
       </property>
-      <item>
-       <layout class="QVBoxLayout" name="verticalLayout_2">
-        <item>
-         <widget class="QLCDNumber" name="label_mines">
-          <property name="maximumSize">
-           <size>
-            <width>200</width>
-            <height>100</height>
-           </size>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLCDNumber" name="label_time">
-          <property name="maximumSize">
-           <size>
-            <width>200</width>
-            <height>100</height>
-           </size>
-          </property>
-          <property name="segmentStyle">
-           <enum>QLCDNumber::Flat</enum>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
       <item>
        <layout class="QVBoxLayout" name="game_buttons">
         <item alignment="Qt::AlignHCenter">
@@ -115,31 +88,79 @@
          </layout>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="counts">
+         <layout class="QHBoxLayout" name="horizontalLayout">
           <item alignment="Qt::AlignHCenter">
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>X:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QSpinBox" name="x_count">
             <property name="enabled">
              <bool>false</bool>
             </property>
+            <property name="maximumSize">
+             <size>
+              <width>50</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="whatsThis">
+             <string>Mines:</string>
+            </property>
             <property name="minimum">
              <number>2</number>
             </property>
            </widget>
           </item>
           <item alignment="Qt::AlignHCenter">
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>Y:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QSpinBox" name="y_count">
             <property name="enabled">
              <bool>false</bool>
             </property>
+            <property name="maximumSize">
+             <size>
+              <width>50</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="whatsThis">
+             <string>Y:</string>
+            </property>
             <property name="minimum">
              <number>2</number>
             </property>
            </widget>
           </item>
           <item alignment="Qt::AlignHCenter">
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string>Mines:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QSpinBox" name="mines_count">
             <property name="enabled">
              <bool>false</bool>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>50</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="whatsThis">
+             <string comment="X" extracomment="X"/>
             </property>
             <property name="minimum">
              <number>3</number>
@@ -173,6 +194,33 @@
           </property>
           <property name="text">
            <string>Start New Game</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="QLCDNumber" name="label_mines">
+          <property name="maximumSize">
+           <size>
+            <width>200</width>
+            <height>100</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLCDNumber" name="label_time">
+          <property name="maximumSize">
+           <size>
+            <width>200</width>
+            <height>100</height>
+           </size>
+          </property>
+          <property name="segmentStyle">
+           <enum>QLCDNumber::Flat</enum>
           </property>
          </widget>
         </item>
