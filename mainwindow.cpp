@@ -23,7 +23,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_button_game_clicked()
 {
-	game_map_clicked = false;
 	
 	if (ui->difficulty_1->isChecked())
 	{
@@ -144,7 +143,7 @@ void MainWindow::create_game_image()
 		{
 			{
 				const char cell = ms->play_field[i][j];
-				const auto color = cell == '*' ? Qt::red : (cell == '=' ? Qt::green : Qt::lightGray);
+				const auto color = cell == '*' ? Qt::red : cell == '=' ? Qt::green : Qt::lightGray;
 				if (cell == 'O') continue; //don't draw empty cells
 #pragma omp critical
 				{
@@ -170,9 +169,6 @@ void MainWindow::create_game_image()
 
 void MainWindow::on_game_map_clicked(QMouseEvent* mouse_event)
 {
-	if(game_map_clicked == true)
-		return;
-	game_map_clicked = true;
 	gamestate_update();
 	if (game_state == 'L' || game_state == 'W') return;
 	if (ms == nullptr) return;
@@ -208,8 +204,7 @@ void MainWindow::on_game_map_clicked(QMouseEvent* mouse_event)
 	else if (ms->checkWon())
 		game_state = 'W';
 	gamestate_update();
-
-	game_map_clicked = false;
+	
 }
 
 void MainWindow::gamestate_update() const

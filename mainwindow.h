@@ -49,6 +49,5 @@ private:
 	void gamestate_update() const;	//updates new game button
 	
 	Ui::MainWindow* ui;
-	bool game_map_clicked=false;
 };
 #endif // MAINWINDOW_H
