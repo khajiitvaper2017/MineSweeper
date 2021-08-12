@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
+#include <thread>
+#include <omp.h>
 MainWindow::MainWindow(QWidget* parent)
 	: QMainWindow(parent)
 	  , ui(new Ui::MainWindow)
@@ -78,12 +79,16 @@ void MainWindow::on_button_game_clicked()
 
 	resize(100000, 1000000);
 	this->setFixedSize(size());
+	std::thread ms_thread(&MainWindow::create_ms_image, this);
+	std::thread game_thread(&MainWindow::create_game_image, this);
+	/*create_ms_image();
+	create_game_image();*/
 
-	create_ms_image();
-	create_game_image();
-
+	ms_thread.join();
 	QPixmap ret(*ms_image);
 	QPainter retP(&ret);
+
+	game_thread.join();
 	retP.drawPixmap(0, 0, *game_image);
 	ui->game_map->setPixmap(ret);
 	qtimer->start(1000);
@@ -92,7 +97,8 @@ void MainWindow::on_button_game_clicked()
 
 void MainWindow::slotTimerAlarm() const
 {
-	auto el = QTime::currentTime().addSecs(-init_time.hour() * 60 * 60 - init_time.minute() * 60 - init_time.second());
+	const auto el = QTime::currentTime().addSecs(
+		-init_time.hour() * 60 * 60 - init_time.minute() * 60 - init_time.second());
 	ui->label_time->display(el.minute() * 60 + el.hour() * 60 * 60 + el.second());
 }
 
@@ -101,17 +107,17 @@ void MainWindow::create_ms_image()
 	ms_image = new QPixmap(x * cell_size + 1, y * cell_size + 1);
 	ms_image->fill();
 	QPainter qp(ms_image);
+
+#pragma omp parallel for collapse(2)
 	for (int i = 0; i < x; i++)
 	{
 		qp.drawLine(i * cell_size, 0, i * cell_size, y * cell_size);
 		for (int j = 0; j < y; j++)
 		{
 			qp.drawLine(0, j * cell_size, x * cell_size, j * cell_size);
-			if (const char ch = ms->field(i, j); ch == '*')
-				qp.drawImage(QPointF(i * cell_size + 1, j * cell_size + 1), QImage(":/resources/img/mine.png"));
-			else
-				qp.drawImage(QPointF(i * cell_size + 1, j * cell_size + 1),
-				             QImage(":/resources/img/" + QString::number(ch) + ".png"));
+			const char ch = ms->field(i, j);
+			qp.drawImage(QPointF(i * cell_size + 1, j * cell_size + 1),
+			             QImage(":/resources/img/" + QString::number(ch) + ".png"));
 		}
 	}
 	qp.drawLine(x * cell_size, 0, x * cell_size, y * cell_size);
@@ -127,25 +133,26 @@ void MainWindow::create_game_image()
 
 	QPainter qp_game(game_image);
 
+#pragma omp parallel for collapse(2)
 	for (int i = 0; i < x; i++)
 	{
 		for (int j = 0; j < y; j++)
 		{
-			if (ms->play_field[i][j] != 'O')
-				qp_game.fillRect(i * cell_size, j * cell_size, cell_size, cell_size, Qt::lightGray);
-
-			if (ms->play_field[i][j] == 'F')
-				qp_game.drawImage(QPointF(i * cell_size + 2, j * cell_size), QImage(":/resources/img/flag.png"));
-
-			else if (ms->play_field[i][j] == '*')
 			{
-				qp_game.fillRect(i * cell_size, j * cell_size, cell_size, cell_size, Qt::red);
-				qp_game.drawImage(QPointF(i * cell_size, j * cell_size), QImage(":/resources/img/mine.png"));
-			}
-			else if (ms->play_field[i][j] == '=')
-			{
-				qp_game.fillRect(i * cell_size, j * cell_size, cell_size, cell_size, Qt::green);
-				qp_game.drawImage(QPointF(i * cell_size, j * cell_size), QImage(":/resources/img/mine.png"));
+				const char cell = ms->play_field[i][j];
+				const auto color = cell == '*' ? Qt::red : cell == '=' ? Qt::green : Qt::lightGray;
+				if (cell == 'O') continue;
+#pragma omp critical
+				{
+					qp_game.fillRect(i * cell_size, j * cell_size, cell_size, cell_size, color);
+					if (cell == 'F')
+						qp_game.drawImage(QPointF(i * cell_size + 2, j * cell_size), QImage(":/resources/img/flag.png"));
+
+					else if (cell == '*'|| cell == '=')
+					{
+						qp_game.drawImage(QPointF(i * cell_size, j * cell_size), QImage(":/resources/img/mine.png"));
+					}
+				}
 			}
 
 			qp_game.drawLine(0, j * cell_size, x * cell_size, j * cell_size);
@@ -181,9 +188,10 @@ void MainWindow::on_game_map_clicked(QMouseEvent* mouse_event)
 		break;
 	}
 
-	create_game_image();
+	std::thread game_thread(&MainWindow::create_game_image, this);
 	QPixmap ret(*ms_image);
 	QPainter retP(&ret);
+	game_thread.join();
 	retP.drawPixmap(0, 0, *game_image);
 	ui->game_map->setPixmap(ret);
 
