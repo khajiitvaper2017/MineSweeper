@@ -39,7 +39,7 @@ MineSweeper::MineSweeper(const int x, const int y, const int mines)
 				for (int a = -1; a <= 1; a++)
 					for (int b = -1; b <= 1; b++)
 					{
-						if (a == 0 && b == 0 || (i + a == x_ || j + b == y_ || i + a == -1 || j + b == -1)) //check bounds and cell itself
+						if ((a == 0 && b == 0) || (i + a == x_ || j + b == y_ || i + a == -1 || j + b == -1)) //check bounds and cell itself
 							continue;
 						if (game_field[i + a][j + b] == '*')
 							continue;
@@ -126,8 +126,8 @@ void MineSweeper::open_null_neighbors(int x, int y)
 	for (int a = -1; a <= 1; a++)
 		for (int b = -1; b <= 1; b++)
 		{
-			if (play_field[x + a][y + b] == 'O'||
-				(a == 0 && b == 0 || (x + a == x_ || y + b == y_ || x + a == -1 || y + b == -1)))
+			if (x + a == x_ || y + b == y_ || x + a == -1 || y + b == -1 || (a == 0 && b == 0) ||
+				play_field[x + a][y + b] == 'O')
 				continue;
 			if (play_field[x + a][y + b] == 'F')	//remove incorrectly installed flag
 			{
@@ -145,7 +145,7 @@ void MineSweeper::open_neighbors(int x, int y)
 	for (int a = -1; a <= 1; a++)
 		for (int b = -1; b <= 1; b++)
 		{
-			if (a == 0 && b == 0 || (x + a == x_ || y + b == y_ || x + a == -1 || y + b == -1))
+			if ((a == 0 && b == 0) || (x + a == x_ || y + b == y_ || x + a == -1 || y + b == -1))
 				continue;
 
 			if (play_field[x + a][y + b] == 'F') flag_count++;
@@ -155,7 +155,7 @@ void MineSweeper::open_neighbors(int x, int y)
 		for (int a = -1; a <= 1; a++)
 			for (int b = -1; b <= 1; b++)
 			{
-				if (a == 0 && b == 0 || (x + a == x_ || y + b == y_ || x + a == -1 || y + b == -1))
+				if ((a == 0 && b == 0) || (x + a == x_ || y + b == y_ || x + a == -1 || y + b == -1))
 					continue;
 				if (play_field[x + a][y + b] != 'O' && play_field[x + a][y + b] != 'F')
 					openCell(x + a, y + b);

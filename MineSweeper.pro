@@ -10,7 +10,6 @@ CONFIG += c++20
 
 SOURCES += \
     MineSweeper.cpp \
-    clickablelabel.cpp \
     main.cpp \
     mainwindow.cpp
 
