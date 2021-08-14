@@ -28,37 +28,37 @@ MineSweeper::MineSweeper(const int x, const int y, const int mines)
 		char& cell = game_field[rand_int(0, x - 1)][rand_int(0, y - 1)];
 		if (cell == '*')
 			continue;
-		cell = '*';
+		cell = '*'; n--;
 	}
 
 	//generate info about mines around each cell
-	for (int i = 0; i < x; i++)
-		for (int j = 0; j < y; j++)
-			if (game_field[i][j] == '*')
+	for (int x = 0; x < x_; x++)
+		for (int y = 0; y < y_; y++)
+			if (game_field[x][y] == '*')
 			{
 				for (int a = -1; a <= 1; a++)
 					for (int b = -1; b <= 1; b++)
 					{
-						if ((a == 0 && b == 0) || (i + a == x_ || j + b == y_ || i + a == -1 || j + b == -1)) //check bounds and cell itself
+						if (check_bounds(x,a,y,b))
 							continue;
-						if (game_field[i + a][j + b] == '*')
+						if (game_field[x + a][y + b] == '*')
 							continue;
 
-						game_field[i + a][j + b] += 1;
+						game_field[x + a][y + b] += 1;
 					}
 			}
 }
 
 char MineSweeper::getGameCell(const int x, const int y)
 {
-	if (x > x_ || y > y_ || x < 0 || y < 0)
+	if (check_bounds(x,y))
 		return '?';							//garbage input = garbage out
 	return game_field[x][y];
 }
 
 void MineSweeper::setFlag(const int x, const int y)
 {
-	if (mines_ == 0 || game_lost || (x > x_ || y > y_ || x < 0 || y < 0))
+	if (mines_ == 0 || game_lost || check_bounds(x,y))
 		return;
 	if (play_field[x][y] != 'O')
 	{
@@ -69,7 +69,7 @@ void MineSweeper::setFlag(const int x, const int y)
 
 void MineSweeper::removeFlag(const int x, const int y)
 {
-	if (game_lost || (x > x_ || y > y_ || x < 0 || y < 0))
+	if (game_lost || check_bounds(x,y))
 		return;
 	if (play_field[x][y] == 'F')
 	{
@@ -80,7 +80,7 @@ void MineSweeper::removeFlag(const int x, const int y)
 
 void MineSweeper::openCell(const int x, const int y)
 {
-	if (game_lost || (x > x_ || y > y_ || x < 0 || y < 0))
+	if (game_lost || check_bounds(x,y))
 		return;
 
 	if (play_field[x][y] != 'F' && play_field[x][y] != '=' && game_field[x][y] == '*')
@@ -128,7 +128,7 @@ void MineSweeper::open_neighbors(int x, int y)
 	for (int a = -1; a <= 1; a++)
 		for (int b = -1; b <= 1; b++)
 		{
-			if ((a == 0 && b == 0) || (x + a == x_ || y + b == y_ || x + a == -1 || y + b == -1))
+			if (check_bounds(x,a,y,b))
 				continue;
 
 			if (play_field[x + a][y + b] == 'F') flag_count++;
@@ -138,7 +138,7 @@ void MineSweeper::open_neighbors(int x, int y)
 		for (int a = -1; a <= 1; a++)
 			for (int b = -1; b <= 1; b++)
 			{
-				if ((a == 0 && b == 0) || (x + a == x_ || y + b == y_ || x + a == -1 || y + b == -1))
+				if (check_bounds(x, a, y, b))
 					continue;
 				if (play_field[x + a][y + b] != 'O'&&play_field[x + a][y + b] != 'F')
 					openCell(x + a, y + b);

@@ -27,7 +27,16 @@ public:
 	
 	std::vector<std::vector<char>> play_field;							//field used by player '*'- Mine 'F'- Flag '='- Mine + Flag 'O'- Opened Cell
 private:
-	
+	[[nodiscard]] bool check_bounds(const int x, const int y) const
+	{
+		return (x > x_ || y > y_ || x < 0 || y < 0);
+	}
+
+	[[nodiscard]] bool check_bounds(const int x,const int a,const int y,const int b) const
+	{
+		return ((a == 0 && b == 0) || (x + a == x_ || y + b == y_ || x + a == -1 || y + b == -1));
+	}
+
 	void open_neighbors(int,int);								//opens neighbours of cell if it's value equal to flag's count
 	
 	void open_mines();											//opens mines if game lost
