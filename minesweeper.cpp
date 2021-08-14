@@ -23,12 +23,12 @@ MineSweeper::MineSweeper(const int x, const int y, const int mines)
 	play_field = game_field;
 
 	//randomly placing mines
-	for (auto n = init_mines_; n != 0;n--)
+	for (auto n = init_mines_; n != 0;)
 	{
 		char& cell = game_field[rand_int(0, x - 1)][rand_int(0, y - 1)];
 		if (cell == '*')
 			continue;
-		cell = '*';
+		cell = '*';n--;
 	}
 
 	//generate info about mines around each cell
@@ -39,7 +39,7 @@ MineSweeper::MineSweeper(const int x, const int y, const int mines)
 				for (int a = -1; a <= 1; a++)
 					for (int b = -1; b <= 1; b++)
 					{
-						if (a == 0 && b == 0 || (i + a == x_ || j + b == y_ || i + a == -1 || j + b == -1)) //check bounds and cell itself
+						if ((a == 0 && b == 0) || (i + a == x_ || j + b == y_ || i + a == -1 || j + b == -1)) //check bounds and cell itself
 							continue;
 						if (game_field[i + a][j + b] == '*')
 							continue;
@@ -95,8 +95,8 @@ void MineSweeper::openCell(const int x, const int y)
 		play_field[x][y] = 'O';
 		open_cells_++;
 	}
-	if (game_field[x][y] == 0)
-		open_null_neighbors(x, y);
+if (game_field[x][y] == 0)
+open_neighbors(x, y);
 	
 }
 
@@ -121,23 +121,6 @@ void MineSweeper::open_mines()
 	}
 }
 
-void MineSweeper::open_null_neighbors(int x, int y)
-{
-	for (int a = -1; a <= 1; a++)
-		for (int b = -1; b <= 1; b++)
-		{
-			if (x + a == x_ || y + b == y_ || x + a == -1 || y + b == -1 || a == 0 && b == 0 ||
-				play_field[x + a][y + b] == 'O')
-				continue;
-			if (play_field[x + a][y + b] == 'F')	//remove incorrectly installed flag
-			{
-				play_field[x + a][y + b] = 0;
-				mines_++;
-			}
-			openCell(x + a, y + b);
-		}
-}
-
 void MineSweeper::open_neighbors(int x, int y)
 {
 	const int cell = game_field[x][y];
@@ -145,19 +128,19 @@ void MineSweeper::open_neighbors(int x, int y)
 	for (int a = -1; a <= 1; a++)
 		for (int b = -1; b <= 1; b++)
 		{
-			if (a == 0 && b == 0 || (x + a == x_ || y + b == y_ || x + a == -1 || y + b == -1))
+			if ((a == 0 && b == 0) || (x + a == x_ || y + b == y_ || x + a == -1 || y + b == -1))
 				continue;
 
 			if (play_field[x + a][y + b] == 'F') flag_count++;
 		}
-	if (cell == flag_count && cell != 0)
+	if (cell == flag_count)
 	{
 		for (int a = -1; a <= 1; a++)
 			for (int b = -1; b <= 1; b++)
 			{
-				if (a == 0 && b == 0 || (x + a == x_ || y + b == y_ || x + a == -1 || y + b == -1))
+				if ((a == 0 && b == 0) || (x + a == x_ || y + b == y_ || x + a == -1 || y + b == -1))
 					continue;
-				if (play_field[x + a][y + b] != 'O' && play_field[x + a][y + b] != 'F')
+				if (play_field[x + a][y + b] != 'O'&&play_field[x + a][y + b] != 'F')
 					openCell(x + a, y + b);
 			}
 	}

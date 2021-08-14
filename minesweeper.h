@@ -29,8 +29,6 @@ public:
 private:
 	
 	void open_neighbors(int,int);								//opens neighbours of cell if it's value equal to flag's count
-	void open_null_neighbors(int,int);							//opens neighbours of cell if it's value is 0
-	//TODO: functions could be united
 	
 	void open_mines();											//opens mines if game lost
 	
