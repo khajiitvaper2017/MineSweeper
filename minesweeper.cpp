@@ -23,12 +23,13 @@ MineSweeper::MineSweeper(const int x, const int y, const int mines)
 	play_field = game_field;
 
 	//randomly placing mines
-	for (auto n = init_mines_; n != 0;n--)
+	for (auto n = init_mines_; n != 0;)
 	{
 		char& cell = game_field[rand_int(0, x - 1)][rand_int(0, y - 1)];
 		if (cell == '*')
 			continue;
-		cell = '*';
+		cell = '*';n--;
+
 	}
 
 	//generate info about mines around each cell
