@@ -28,7 +28,7 @@ public:
 private slots:
 	void on_timer_alarm() const;
 	void on_button_game_clicked();
-	void on_game_map_clicked(QMouseEvent*);
+	void on_game_map_clicked(const QMouseEvent*);
 	void on_difficulty_custom_toggled(bool checked) const;
 
 private:

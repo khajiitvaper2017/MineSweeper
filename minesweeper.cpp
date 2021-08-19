@@ -16,9 +16,10 @@ MineSweeper::MineSweeper(const int x, const int y, const int mines)
 	init_mines_ = mines;
 	
 	random_device.seed(time(nullptr));	//time is seed for random device
-	
+
+	game_field.reserve(x);
 	for (int i = 0; i < x; i++)
-		game_field.emplace_back(y, 0);		
+		game_field.emplace_back(y, 0);
 
 	play_field = game_field;
 

@@ -10,9 +10,18 @@ MainWindow::MainWindow(QWidget* parent)
 
 	//Setting maximum custom area for default screen
 	const QSize size = qApp->screens()[0]->size();
-	ui->x_count->setMaximum((size.width() - 70) / cell_size);
-	ui->y_count->setMaximum((size.height() - 400) / cell_size);
+
+	const int x_max = (size.width() - 70) / cell_size;
+	const int y_max = (size.height() - 400) / cell_size;
+
+	ui->x_count->setMaximum(x_max);
+	ui->y_count->setMaximum(y_max);
+
+	ui->x_count->setValue(x_max);
+	ui->y_count->setValue(y_max);
+
 	ui->mines_count->setMaximum(ui->x_count->maximum() * ui->y_count->maximum() - 1);
+	ui->mines_count->setValue(y_max*x_max*0.2);
 }
 
 MainWindow::~MainWindow()
@@ -57,7 +66,7 @@ void MainWindow::on_button_game_clicked()
 
 	delete qtimer;
 	qtimer = new QTimer();
-	connect(qtimer, SIGNAL(timeout()), this, SLOT(slotTimerAlarm()));
+	connect(qtimer, SIGNAL(timeout()), this, SLOT(on_timer_alarm()));
 	
 	game_state = 'P';
 	gamestate_update();
@@ -167,7 +176,7 @@ void MainWindow::create_game_image()
 	qp_game.drawLine(0, y* cell_size, x* cell_size, y* cell_size); // last horizontal line
 }
 
-void MainWindow::on_game_map_clicked(QMouseEvent* mouse_event)
+void MainWindow::on_game_map_clicked(const QMouseEvent* mouse_event)
 {
 	gamestate_update();
 	if (game_state == 'L' || game_state == 'W') return;
